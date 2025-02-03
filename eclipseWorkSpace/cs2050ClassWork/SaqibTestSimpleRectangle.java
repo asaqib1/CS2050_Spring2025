@@ -4,6 +4,12 @@ public class SaqibTestSimpleRectangle {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
+		SimpleRectangle rectangle1 = new SimpleRectangle();
+		SimpleRectangle rectangle2 = new SimpleRectangle(1, 1);
+		SimpleRectangle rectangle3 = new SimpleRectangle(3, 4);
+		
+		
+		
 	}//end main
 
 }//end SaqibTestSimpleRectangle class
