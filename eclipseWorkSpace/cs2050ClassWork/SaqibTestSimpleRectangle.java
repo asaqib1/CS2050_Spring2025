@@ -51,4 +51,5 @@ class SimpleRectangle {
 	public void setWidth(double newWidth) {
 		this.width = newWidth;
 	}
+	
 }//end SimpleRectangle class
