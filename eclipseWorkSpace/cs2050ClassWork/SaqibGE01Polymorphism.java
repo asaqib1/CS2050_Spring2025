@@ -67,3 +67,26 @@ class Animal {
 	}
 	
 }//end Animal class
+
+class Bear extends Animal {
+	
+	public Bear(String name, String food, int weight, int sleep, String location) {
+		super(name, food, weight, sleep, location);
+	}
+	
+	@Override
+	public void eat() {
+		System.out.print("Bear is eating");
+	}
+	
+	@Override
+	public void sleep() {
+		System.out.print("Bear is sleeping");
+	}
+	
+	@Override
+	public void swim() {
+		System.out.print("Bear is swimming");
+	}
+	
+}//end Bear class
