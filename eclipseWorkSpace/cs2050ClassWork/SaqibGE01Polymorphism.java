@@ -103,6 +103,7 @@ class Elephant extends Animal {
 }//end Elephant class
 
 class Monkey extends Animal {
+	
 	public Monkey(String name, String food, int weight, int sleep, String location) {
 		super(name, food, weight, sleep, location);
 	}
@@ -118,3 +119,11 @@ class Monkey extends Animal {
 	}
 	
 }//end Monkey class
+
+class Sloth extends Animal {
+	
+	public Sloth(String name, String food, int weight, int sleep, String location) {
+		super(name, food, weight, sleep, location);
+	}
+	
+}//end Sloth class
