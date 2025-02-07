@@ -89,6 +89,14 @@ class Bear extends Animal {
 		System.out.print("Bear is swimming");
 	}
 	
+	@Override
+	public String toString() {
+		return "Bear: Name: " + getName()
+				+ " - Weighs: " + getWeight()
+				+ " lbs Sleeps: " + getSleep() 
+				+ " hours - Location: " + getLocation();
+	}
+	
 }//end Bear class
 
 class Elephant extends Animal {
@@ -100,6 +108,15 @@ class Elephant extends Animal {
 	public void sleep() {
 		System.out.print("Elephant is sleeping");
 	}
+	
+	@Override 
+	public String toString() {
+		return "Elephant: Name: " + getName()
+		+ " - Weighs: " + getWeight()
+		+ " lbs Sleeps: " + getSleep() 
+		+ " hours - Location: " + getLocation();
+	}
+	
 }//end Elephant class
 
 class Monkey extends Animal {
@@ -118,12 +135,28 @@ class Monkey extends Animal {
 		System.out.print("Monkey is swimming");
 	}
 	
+	@Override 
+	public String toString() {
+		return "Monkey: Name: " + getName()
+		+ " - Weighs: " + getWeight()
+		+ " lbs Sleeps: " + getSleep() 
+		+ " hours - Location: " + getLocation();
+	}
+	
 }//end Monkey class
 
 class Sloth extends Animal {
 	
 	public Sloth(String name, String food, int weight, int sleep, String location) {
 		super(name, food, weight, sleep, location);
+	}
+	
+	@Override 
+	public String toString() {
+		return "Sloth: Name: " + getName()
+		+ " - Weighs: " + getWeight()
+		+ " lbs Sleeps: " + getSleep() 
+		+ " hours - Location: " + getLocation();
 	}
 	
 }//end Sloth class
