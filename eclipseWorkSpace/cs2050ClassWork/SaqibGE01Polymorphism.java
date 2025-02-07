@@ -90,3 +90,31 @@ class Bear extends Animal {
 	}
 	
 }//end Bear class
+
+class Elephant extends Animal {
+	public Elephant(String name, String food, int weight, int sleep, String location) {
+		super(name, food, weight, sleep, location);
+	}
+	
+	@Override
+	public void sleep() {
+		System.out.print("Elephant is sleeping");
+	}
+}//end Elephant class
+
+class Monkey extends Animal {
+	public Monkey(String name, String food, int weight, int sleep, String location) {
+		super(name, food, weight, sleep, location);
+	}
+	
+	@Override
+	public void eat() {
+		System.out.print("Monkey is eating");
+	}
+	
+	@Override
+	public void swim() {
+		System.out.print("Monkey is swimming");
+	}
+	
+}//end Monkey class
