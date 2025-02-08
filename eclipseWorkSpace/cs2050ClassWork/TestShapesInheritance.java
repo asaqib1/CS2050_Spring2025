@@ -1,4 +1,6 @@
-
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 /**
  * Add comments
@@ -15,9 +17,28 @@ public class TestShapesInheritance
 		System.out.printf("The radius is  %.2f \n", circle.getRadius());
 		System.out.printf("The area is  %.2f \n", circle.getArea());
 		System.out.printf("The diameter is  %.2f \n", circle.getDiameter());
-
-				
 		
+		RectangleFromSimpleGeometricShape rectangle1 = new RectangleFromSimpleGeometricShape();
+		System.out.printf("\nRectangle 1 information: ");
+		System.out.print("\nThe width is " + rectangle1.getWidth());
+		System.out.print("\nThe height is " + rectangle1.getHeight());
+		System.out.print("\nThe area is " + rectangle1.getArea());
+		System.out.println("\nThe perimeter is " + rectangle1.getPerimeter());
+		RectangleFromSimpleGeometricShape rectangle2 = new RectangleFromSimpleGeometricShape(2, 4);
+		System.out.printf("\nRectangle 2 information: ");
+		System.out.print("\nThe width is " + rectangle2.getWidth());
+		System.out.print("\nThe height is " + rectangle2.getHeight());
+		System.out.print("\nThe area is " + rectangle2.getArea());
+		System.out.println("\nThe perimeter is " + rectangle2.getPerimeter());
+		RectangleFromSimpleGeometricShape rectangle3 = new RectangleFromSimpleGeometricShape(10, 5, "Yellow", true);
+		System.out.printf("\nRectangle 3 information: ");
+		System.out.print("\nThe width is " + rectangle3.getWidth());
+		System.out.print("\nThe height is " + rectangle3.getHeight());
+		System.out.printf("\nThe color is " + rectangle3.getColor());
+		System.out.print("\nThe area is " + rectangle3.getArea());
+		System.out.println("\nThe perimeter is " + rectangle3.getPerimeter());
+		
+				
 	}//end main
 
 }//end TestShapeInheritance Class
@@ -180,13 +201,16 @@ extends SimpleGeometricShape {
 	
 	private double width;
 	private double height;
-	
+	private static int rectangleCount = 0; 
+
 	public RectangleFromSimpleGeometricShape() {
+		rectangleCount ++;
 	}
 	
 	public RectangleFromSimpleGeometricShape(double width, double height) {
 		this.width = width;
 		this.height = height;
+		rectangleCount ++;
 	}
 	
 	public RectangleFromSimpleGeometricShape(double width, double height, String color, boolean filled) {
@@ -194,6 +218,7 @@ extends SimpleGeometricShape {
 		this.height = height;
 		setColor(color);
 		setFilled(filled);
+		rectangleCount ++;
 	}
 	
 	public double getWidth() {
@@ -219,6 +244,24 @@ extends SimpleGeometricShape {
 	
 	public double getPerimeter() {
 		return 2 * (width * height);
+	}
+	
+	public static int getNumberOfRectangles() {
+		return rectangleCount;
+	}
+	
+	public static void writeRectangleInfoToFile(RectangleFromSimpleGeometricShape rectangle) throws IOException {
+		File rectangleFile = new File("rectangles.txt");
+		
+		PrintWriter resultsFile = new PrintWriter(rectangleFile);
+		
+		resultsFile.println("Rectangle information: ");
+		resultsFile.print("\nThe area is " + rectangle.getArea());
+		resultsFile.println("\nThe perimeter is " + rectangle.getPerimeter());
+		
+		resultsFile.close();
+		
+		System.out.print("The file is located at: " + rectangleFile.getAbsolutePath());
 	}
 	
 }//end RectangleFromSimpleGeometricShape class
