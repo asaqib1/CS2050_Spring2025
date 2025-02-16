@@ -1,10 +1,7 @@
-/**
- * 
- */
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
 
-/**
- * 
- */
 public class SaqibGE01Polymorphism {
 
 	/**
@@ -12,7 +9,95 @@ public class SaqibGE01Polymorphism {
 	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
+		
+		Scanner fileScanner = null;
+		
+		try {
+			
+			//set up scanner to read from file
+			fileScanner = new Scanner(new File("Animals.txt"));
 
+			//read 1st value for array size
+			final int arraySize = fileScanner.nextInt();
+			fileScanner.nextLine();
+			Animal totalAnimals[] = new Animal[arraySize];
+
+			//read animal information from file
+			int index = 0;
+			while (fileScanner.hasNext()) {
+				String animalType = fileScanner.next().trim();
+				String animalName = fileScanner.next().trim();
+				String food = fileScanner.next().trim();
+				int weight = fileScanner.nextInt();
+				int sleep = fileScanner.nextInt();
+				String location = fileScanner.nextLine().trim();
+
+				//create animal object and store in array
+				Animal newAnimal = null;
+				if (animalType.equalsIgnoreCase("bear")) {
+					newAnimal = new Bear(animalName, food, weight, sleep, location);
+				}
+				else if (animalType.equalsIgnoreCase("elephant")) {
+					newAnimal = new Elephant(animalName, food, weight, sleep, location);
+				}
+				else if (animalType.equalsIgnoreCase("monkey")) {
+					newAnimal = new Monkey(animalName, food, weight, sleep, location);
+				}
+				else if (animalType.equalsIgnoreCase("sloth")) {
+					newAnimal = new Sloth(animalName, food, weight, sleep, location);
+				}
+				
+				totalAnimals[index] = newAnimal;
+				index++;
+
+			}
+			
+			for (int i = 0; i < totalAnimals.length; i++) {
+				System.out.print("Animal[" + i + "] is a");
+				if (totalAnimals[i] instanceof Bear) {
+					System.out.println(" Bear");
+					System.out.println(totalAnimals[i]);
+					totalAnimals[i].toString();
+					totalAnimals[i].eat();
+					totalAnimals[i].sleep();
+					totalAnimals[i].swim();
+				}
+				else if (totalAnimals[i] instanceof Elephant) {
+					System.out.println("n Elephant");
+					System.out.println(totalAnimals[i]);
+					totalAnimals[i].toString();
+					totalAnimals[i].eat();
+					totalAnimals[i].sleep();
+					totalAnimals[i].swim();
+				}
+				else if (totalAnimals[i] instanceof Monkey) {
+					System.out.println(" Monkey");
+					System.out.println(totalAnimals[i]);
+					totalAnimals[i].toString();
+					totalAnimals[i].eat();
+					totalAnimals[i].sleep();
+					totalAnimals[i].swim();
+				}
+				else if (totalAnimals[i] instanceof Sloth) {
+					System.out.println(" Sloth");
+					System.out.println(totalAnimals[i]);
+					totalAnimals[i].toString();
+					totalAnimals[i].eat();
+					totalAnimals[i].sleep();
+					totalAnimals[i].swim();
+				}
+			}
+
+		} catch (FileNotFoundException e) {
+			System.out.print("File was not found");
+			
+		} finally {
+			if (fileScanner != null){
+				fileScanner.close();
+			}		
+		}
+		
+		
 	}//end main
 
 }//end main class
@@ -55,15 +140,15 @@ class Animal {
 	}
 	
 	public void eat() {
-		System.out.print("Animal is eating");
+		System.out.println("Animal is eating");
 	}
 	
 	public void sleep() {
-		System.out.print("Animal is sleeping");
+		System.out.println("Animal is sleeping");
 	}
 	
 	public void swim() {
-		System.out.print("Animal is swimming");
+		System.out.println("Animal is swimming");
 	}
 	
 }//end Animal class
@@ -76,17 +161,17 @@ class Bear extends Animal {
 	
 	@Override
 	public void eat() {
-		System.out.print("Bear is eating");
+		System.out.println("Bear is eating");
 	}
 	
 	@Override
 	public void sleep() {
-		System.out.print("Bear is sleeping");
+		System.out.println("Bear is sleeping");
 	}
 	
 	@Override
 	public void swim() {
-		System.out.print("Bear is swimming");
+		System.out.println("Bear is swimming");
 	}
 	
 	@Override
@@ -106,7 +191,7 @@ class Elephant extends Animal {
 	
 	@Override
 	public void sleep() {
-		System.out.print("Elephant is sleeping");
+		System.out.println("Elephant is sleeping");
 	}
 	
 	@Override 
@@ -127,12 +212,12 @@ class Monkey extends Animal {
 	
 	@Override
 	public void eat() {
-		System.out.print("Monkey is eating");
+		System.out.println("Monkey is eating");
 	}
 	
 	@Override
 	public void swim() {
-		System.out.print("Monkey is swimming");
+		System.out.println("Monkey is swimming");
 	}
 	
 	@Override 
