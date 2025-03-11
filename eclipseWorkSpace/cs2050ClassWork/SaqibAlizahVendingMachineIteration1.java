@@ -12,7 +12,24 @@ public class SaqibAlizahVendingMachineIteration1 {
 		System.out.println("Enter the number of floors for the car vending machine: ");
 		int floor = input.nextInt();
 		System.out.println("Enter the number of spaces for the car vending machine: ");
-		int spaces = input.nextInt();
+		int space = input.nextInt();
+		
+		System.out.println("=== Car Vending Machine Menu ===");
+		System.out.println("1. Load Car Data");
+		System.out.println("2. Display Vending Machine");
+		System.out.println("3. Retrieve a Car");
+		System.out.println("4. Print Sorted Inventory (Price)");
+		System.out.println("5. Print Sorted Inventory (Year)");
+		System.out.println("6. Exit");
+		
+		int choice = input.nextInt();
+		
+		
+		
+		Car[][] array = new Car[floor][space];
+		vendingMachine newMachine = new vendingMachine(floor, space, array);
+		
+		
 		
 		input.close();
 		
@@ -200,6 +217,7 @@ class vendingMachine {
 	}
 	
 	public void displayVendingMachine() {
+		System.out.println("Inventory Location");
 		for (int row = 0; row < carsArray.length; row ++) {
 			System.out.println("Floor " + (row + 1));
 			for (int col = 0; col < carsArray[0].length; col ++) {
