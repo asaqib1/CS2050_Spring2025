@@ -1,13 +1,42 @@
+import java.util.Scanner;
+import java.io.File;
+import java.io.FileNotFoundException;
 
 public class SaqibAlizahVendingMachineIteration1 {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
+		
+		Scanner input = new Scanner(System.in);
 
+		System.out.println("Enter the number of floors for the car vending machine: ");
+		int floor = input.nextInt();
+		System.out.println("Enter the number of spaces for the car vending machine: ");
+		int spaces = input.nextInt();
+		
+		input.close();
+		
 	}//end main
 	
-	public static void readFromFile() {
+	public static void readFromFile(String filename, vendingMachine newMachine) throws FileNotFoundException {
 		
+		//set up scanner to read from file
+		Scanner fileScanner = new Scanner(new File(filename));
+		
+		while (fileScanner.hasNextLine()) {
+			int rowNumber = fileScanner.nextInt();
+			int colNumber = fileScanner.nextInt();
+			int year = fileScanner.nextInt();
+			double price = fileScanner.nextDouble();
+			fileScanner.nextLine();
+			String make = fileScanner.nextLine();
+			String model = fileScanner.nextLine();
+			
+			Car newCar = new Car(year, price, make, model);
+			newMachine.addCar(newCar, rowNumber, colNumber);
+		}
+		
+		fileScanner.close();
 	}
 
 }//end main class
@@ -55,7 +84,7 @@ class vendingMachine {
 	private Car carsArray[][];
 	
 	public vendingMachine(int floor, int space, Car carsArray[][]) {
-		carsArray = new Car[floor][space];
+		this.carsArray = new Car[floor][space];
 	}
 	
 	public void addCar(Car currentCar, int floor, int space) {
