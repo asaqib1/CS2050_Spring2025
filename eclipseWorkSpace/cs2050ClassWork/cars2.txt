@@ -1,0 +1,4 @@
+0 2 2017 28000.00 Toyota Prius
+1 2 2005 8000.00 Toyota Camry
+3 4 2022 53000.00 Chevrolet Traverse
+2 4 2022 26000.00 Ford F150
