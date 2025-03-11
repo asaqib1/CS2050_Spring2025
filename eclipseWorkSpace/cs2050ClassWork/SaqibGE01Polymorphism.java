@@ -102,7 +102,7 @@ public class SaqibGE01Polymorphism {
 
 }//end main class
 
-class Animal {
+class AnimalP {
 	
 	//data fields
 	private String name;
@@ -111,7 +111,7 @@ class Animal {
 	private int sleep;
 	private String location;
 	
-	public Animal(String name, String food, int weight, int sleep, String location) {
+	public AnimalP(String name, String food, int weight, int sleep, String location) {
 		this.name = name;
 		this.food = food;
 		this.weight = weight;
@@ -153,9 +153,9 @@ class Animal {
 	
 }//end Animal class
 
-class Bear extends Animal {
+class BearP extends AnimalP {
 	
-	public Bear(String name, String food, int weight, int sleep, String location) {
+	public BearP(String name, String food, int weight, int sleep, String location) {
 		super(name, food, weight, sleep, location);
 	}
 	
@@ -184,8 +184,8 @@ class Bear extends Animal {
 	
 }//end Bear class
 
-class Elephant extends Animal {
-	public Elephant(String name, String food, int weight, int sleep, String location) {
+class ElephantP extends AnimalP {
+	public ElephantP(String name, String food, int weight, int sleep, String location) {
 		super(name, food, weight, sleep, location);
 	}
 	
@@ -204,9 +204,9 @@ class Elephant extends Animal {
 	
 }//end Elephant class
 
-class Monkey extends Animal {
+class MonkeyP extends AnimalP {
 	
-	public Monkey(String name, String food, int weight, int sleep, String location) {
+	public MonkeyP(String name, String food, int weight, int sleep, String location) {
 		super(name, food, weight, sleep, location);
 	}
 	
@@ -230,9 +230,9 @@ class Monkey extends Animal {
 	
 }//end Monkey class
 
-class Sloth extends Animal {
+class SlothP extends AnimalP {
 	
-	public Sloth(String name, String food, int weight, int sleep, String location) {
+	public SlothP(String name, String food, int weight, int sleep, String location) {
 		super(name, food, weight, sleep, location);
 	}
 	
