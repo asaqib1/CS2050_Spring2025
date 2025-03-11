@@ -27,15 +27,15 @@ public class DealershipExceptionHandling
 			System.out.println("Adding more cars...");
 
 			// Adding extra cars
-			Car car5 = new Car("Porsche", "Spyder", 164200.00);
-			Car car6 = new Car("Hyundai", "Ioniq", 29000.00);
+			CarPE car5 = new CarPE("Porsche", "Spyder", 164200.00);
+			CarPE car6 = new CarPE("Hyundai", "Ioniq", 29000.00);
 			dealership1.addCar(car5);
 			dealership1.addCar(car6);
 
 			dealership1.displayCars();
 
 			// Display the most expensive car
-			Car mostExpensive = dealership1.findMostExpensiveCar();
+			CarPE mostExpensive = dealership1.findMostExpensiveCar();
 			if (mostExpensive != null)
 			{
 				System.out.println("\nCar with highest price in dealership:");
@@ -67,7 +67,7 @@ public class DealershipExceptionHandling
 				String make = fileScanner.next().trim();
 				String model = fileScanner.next().trim();
 				double price = Double.parseDouble(fileScanner.next().trim());
-				Car currentCar = new Car(make, model, price);
+				CarPE currentCar = new CarPE(make, model, price);
 				dealership.addCar(currentCar);
 			}
 		} finally
@@ -99,13 +99,13 @@ class InvalidCarCountException extends Exception
 /**
  * Represents a single Car with make, model, and price attributes.
  */
-class Car
+class CarPE
 {
 	private String make;
 	private String model;
 	private double price;
 
-	public Car(String make, String model, double price)
+	public CarPE(String make, String model, double price)
 	{
 		this.make = make;
 		this.model = model;
@@ -134,7 +134,7 @@ class Car
 class Dealership
 {
 	private String name;
-	private Car[] cars;
+	private CarPE[] cars;
 	private int numCars;
 
 	/**
@@ -144,7 +144,7 @@ class Dealership
 	{
 		setMaxNumCars(maxNumCars);
 		this.name = name;
-		cars = new Car[maxNumCars];
+		cars = new CarPE[maxNumCars];
 		numCars = 0;
 	}
 
@@ -175,7 +175,7 @@ class Dealership
 	/**
 	 * Adds a new car to the dealership if there is space.
 	 */
-	public void addCar(Car carToAdd)
+	public void addCar(CarPE carToAdd)
 	{
 		if (numCars < cars.length)
 		{
@@ -191,7 +191,7 @@ class Dealership
 	/**
 	 * Finds the car with the highest price in the dealership.
 	 */
-	public Car findMostExpensiveCar()
+	public CarPE findMostExpensiveCar()
 	{
 		if (numCars == 0)
 		{
@@ -227,7 +227,7 @@ class Dealership
 		System.out.println("--------------------------------------------");
 		for (int i = 0; i < numCars; i++)
 		{
-			Car car = cars[i];
+			CarPE car = cars[i];
 			System.out.printf("%s\t\t%s\t\t%.2f\n", car.getModel(), car.getMake(), car.getPrice());
 		}
 	}
