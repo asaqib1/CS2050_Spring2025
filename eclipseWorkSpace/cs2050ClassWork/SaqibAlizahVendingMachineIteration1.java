@@ -4,17 +4,23 @@ import java.io.FileNotFoundException;
 
 public class SaqibAlizahVendingMachineIteration1 {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws FileNotFoundException {
 		// TODO Auto-generated method stub
 		
 		Scanner input = new Scanner(System.in);
 
-		System.out.println("Enter the number of floors for the car vending machine: ");
+		System.out.print("Enter the number of floors for the car vending machine: ");
 		int floor = input.nextInt();
-		System.out.println("Enter the number of spaces for the car vending machine: ");
+		System.out.print("Enter the number of spaces for the car vending machine: ");
 		int space = input.nextInt();
 		
-		System.out.println("=== Car Vending Machine Menu ===");
+		Car[][] array = new Car[floor][space];
+		vendingMachine newMachine = new vendingMachine(floor, space, array);
+		
+		boolean repeat = true;
+
+		do {
+		System.out.printf("%n=== Car Vending Machine Menu ===%n");
 		System.out.println("1. Load Car Data");
 		System.out.println("2. Display Vending Machine");
 		System.out.println("3. Retrieve a Car");
@@ -22,14 +28,39 @@ public class SaqibAlizahVendingMachineIteration1 {
 		System.out.println("5. Print Sorted Inventory (Year)");
 		System.out.println("6. Exit");
 		
+		System.out.printf("%nEnter your choice: ");
 		int choice = input.nextInt();
 		
+		switch (choice) {
+			case 1:
+				System.out.print("Enter the file name: ");
+				String fileName = input.next();
+				readFromFile(fileName, newMachine);
+				break;
+			case 2:
+				newMachine.displayVendingMachine();
+				break;
+			case 3:
+				System.out.print("Enter floor to retrieve car: ");
+				int floorNumber = input.nextInt();
+				System.out.print("Enter location to retrieve car: ");
+				int spaceNumber = input.nextInt();
+				newMachine.retrieveCar(floorNumber, spaceNumber);
+				break;
+			case 4:
+				newMachine.displayPriceSortedCars();
+				break;
+			case 5:
+				newMachine.displayYearSortedCars();
+				break;
+			case 6:
+				System.out.print("Exiting program. Goodbye!");
+				repeat = false;
+				break;
+			
+		}
 		
-		
-		Car[][] array = new Car[floor][space];
-		vendingMachine newMachine = new vendingMachine(floor, space, array);
-		
-		
+		} while (repeat == true);
 		
 		input.close();
 		
@@ -40,14 +71,13 @@ public class SaqibAlizahVendingMachineIteration1 {
 		//set up scanner to read from file
 		Scanner fileScanner = new Scanner(new File(filename));
 		
-		while (fileScanner.hasNextLine()) {
+		while (fileScanner.hasNextInt()) {
 			int rowNumber = fileScanner.nextInt();
 			int colNumber = fileScanner.nextInt();
 			int year = fileScanner.nextInt();
 			double price = fileScanner.nextDouble();
-			fileScanner.nextLine();
-			String make = fileScanner.nextLine();
-			String model = fileScanner.nextLine();
+			String make = fileScanner.next();
+			String model = fileScanner.next();
 			
 			Car newCar = new Car(year, price, make, model);
 			newMachine.addCar(newCar, rowNumber, colNumber);
@@ -90,7 +120,7 @@ class Car {
 	
 	@Override
 	public String toString() {
-		return  manufacturer + model + year + price;
+		return  manufacturer + " " + model + " " + year + " - $" + price;
 	}
 	
 }//end Car class
@@ -105,45 +135,43 @@ class vendingMachine {
 	}
 	
 	public void addCar(Car currentCar, int floor, int space) {
-		if(carsArray[floor][space] == null) {
+		if (floor < 0 || floor >= carsArray.length || space < 0 || space >= carsArray[0].length) {
+			System.out.println("Error: Invalid position at Floor: " + (floor + 1) + " Space: " + (space + 1));
+			System.out.println("Can not place car " + currentCar.toString());
+		}
+		
+		else if(carsArray[floor][space] == null) {
 			carsArray[floor][space] = currentCar;
 		}
 		
 		else {
 			System.out.println("Error: Slot at Floor: " 
-								+ floor + " Space: " 
-								+ space + " is already occupied");
+								+ (floor + 1) + " Space: " 
+								+ (space + 1) + " is already occupied.");
 			System.out.println("Car " + currentCar + " cannot be placed.");
 		}
 	}
 	
 	private Car[] flattenArray(Car[][] array) {
 		
-		int arraySize = array.length * array[0].length;
-		Car newArray[] = new Car[arraySize];
+		int nullCount = 0;
+		for (int row = 0; row < array.length; row++) {
+			for (int column = 0; column < array[row].length; column++) {
+				if (array[row][column] != null) {
+					nullCount++;
+				}
+			}
+		}
+		
+		Car[] newArray = new Car[nullCount];
 		int newArrayCount = 0;
 		
 		for (int row = 0; row < array.length; row++) {
 			for (int column = 0; column < array[row].length; column++) {
-				newArray[newArrayCount] = array[row][column];
-				newArrayCount++;
-			}
-		}
-		
-		return newArray;
-	}
-	
-	private Car[][] unflattenArray(Car[] array, int rows, int cols) {
-		
-		Car newArray[][] = new Car[rows][cols];
-		
-		int index = 0;
-		
-		for (int row = 0; row < rows; row++) {
-			
-			for (int column = 0; column < cols; column ++) {
-				newArray[row][column] = array[index];
-				index++;
+				if (array[row][column] != null) {
+					newArray[newArrayCount] = array[row][column];
+					newArrayCount++;
+				}
 			}
 		}
 		
@@ -168,15 +196,13 @@ class vendingMachine {
 			
 		}
 		
-		Car unflattenedArray[][] = unflattenArray(flattenedArray, carsArray.length, carsArray[0].length);
-		
 		//print array out
-		for (int row = 0; row < unflattenedArray.length; row++) {
-			for (int column = 0; column < unflattenedArray[0].length; column++) {
-				System.out.println(unflattenedArray[row][column].getPrice());
+		System.out.printf("%nSorted Inventory by Price: %n");
+		for (int row = 0; row < flattenedArray.length; row++) {
+			if (flattenedArray[row] != null) {
+				System.out.println(flattenedArray[row].toString());
 			}
 		}
-		
 	}
 	
 	public void displayYearSortedCars() {
@@ -197,34 +223,37 @@ class vendingMachine {
 			
 		}
 		
-		Car unflattenedArray[][] = unflattenArray(flattenedArray, carsArray.length, carsArray[0].length);
-		
+		System.out.printf("Sorted Inventory by Year: %n");
 		//print array out
-		for (int row = 0; row < unflattenedArray.length; row++) {
-			for (int column = 0; column < unflattenedArray[0].length; column++) {
-				System.out.println(unflattenedArray[row][column].getYear());
+		for (int row = 0; row < flattenedArray.length; row++) {
+			if (flattenedArray[row] != null) {
+				System.out.println(flattenedArray[row].toString());
 			}
 		}
 		
 	}
 		
 	public void retrieveCar(int floor, int space) {
-		System.out.print("Car retrieved from floor " 
+		if (carsArray[floor][space] != null) {
+		System.out.printf("Car retrieved from floor " 
 							+ floor + " location " 
 							+ space + ": ");
-		String car = carsArray[floor][space].toString();
-		System.out.print(car);
+		String car = carsArray[floor - 1][space - 1].toString();
+		System.out.printf(car + "%n");
+		} else {
+			System.out.println("No car located at Floor " + floor + " Location " + space);
+		}
 	}
 	
 	public void displayVendingMachine() {
 		System.out.println("Inventory Location");
 		for (int row = 0; row < carsArray.length; row ++) {
-			System.out.println("Floor " + (row + 1));
+			System.out.println("Floor " + (row + 1) + ": ");
 			for (int col = 0; col < carsArray[0].length; col ++) {
 				if (carsArray[row][col] == null) {
-					System.out.println("Space " + (col + 1) + " EMPTY");
+					System.out.println("	Space " + (col + 1) + " EMPTY");
 				} else {
-					System.out.println("Space " + (col + 1) + ": " + carsArray[row][col].toString());
+					System.out.println("	Space " + (col + 1) + ": " + carsArray[row][col].toString());
 				}
 			}
 		}
