@@ -122,7 +122,7 @@ public class SaqibAlizahVendingMachineIteration1 {
 				newMachine.addCar(newCar, rowNumber, colNumber);
 			}
 			
-		// Prints out an error message if the file the user inputted is not found
+		// Prints out an error message if the file the user inputed is not found
 		} catch (FileNotFoundException e) {
 			System.out.printf("File was not found %n");
 		
