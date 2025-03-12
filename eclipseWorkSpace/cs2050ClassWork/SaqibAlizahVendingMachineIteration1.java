@@ -25,16 +25,13 @@ public class SaqibAlizahVendingMachineIteration1 {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		
-		// Set up scanner to get input from the user
 		Scanner input = new Scanner(System.in);
 
-		// Get user input for dimensions of the 2D array
 		System.out.print("Enter the number of floors for the car vending machine: ");
 		int floor = input.nextInt();
 		System.out.print("Enter the number of spaces for the car vending machine: ");
 		int space = input.nextInt();
 		
-		// Create a new 2D array with the specified number of floors and spaces 
 		VendingMachine newMachine = new VendingMachine(floor, space);
 		
 		// Sets condition so the menu repeats until user quits
@@ -85,7 +82,6 @@ public class SaqibAlizahVendingMachineIteration1 {
 		
 		} while (repeat == true);
 		
-		// Close scanner 
 		input.close();
 		
 	}//end main
@@ -104,7 +100,6 @@ public class SaqibAlizahVendingMachineIteration1 {
 		Scanner fileScanner = null;
 		
 		try {
-			// Set up scanner to read from file
 			fileScanner = new Scanner(new File(filename));
 		
 			// Reads each line from the file to extract car details 
@@ -139,7 +134,6 @@ public class SaqibAlizahVendingMachineIteration1 {
 
 class Car {
 	
-	// Car attributes: year of manufacture, price, manufacturer name, and model name
 	private int year;
 	private double price;
 	private String manufacturer;
@@ -159,22 +153,18 @@ class Car {
 		this.model = model;
 	}
 	
-	// Returns the year the car was manufactured
 	public int getYear() {
 		return year;
 	}
 	
-	// Returns the price of the car
 	public double getPrice() {
 		return price;
 	}
 	
-	// Returns the name of the manufacturer
 	public String getManufacturer() {
 		return manufacturer;
 	}
 	
-	// Returns the model name of the car
 	public String getModel() {
 		return model;
 	}
@@ -190,7 +180,6 @@ class Car {
 
 class VendingMachine {
 	
-	// 2D Array to store Car objects in the vending machine
 	private Car carsArray[][];
 	
 	/**
@@ -214,7 +203,7 @@ class VendingMachine {
 		// Check if the given floor and space are out of bounds
 		// If so, prints out an error message
 		if (floor < 0 || floor >= carsArray.length || space < 0 || space >= carsArray[0].length) {
-			System.out.println("Error: Invalid position at Floor: " + (floor + 1) + " Space: " + (space + 1));
+			System.out.println("Er: Invalid position at Floor: " + (floor + 1) + " Space: " + (space + 1));
 			System.out.println("Can not place car " + currentCar.toString());
 		}
 		
