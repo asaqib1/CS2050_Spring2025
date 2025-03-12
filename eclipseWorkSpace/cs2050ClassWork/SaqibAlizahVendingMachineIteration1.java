@@ -1,3 +1,21 @@
+/*
+ * Car Vending Machine Program - Iteration 01
+ * ------------------------------------------
+ * This program simulates a car vending machine where cars are stored
+ * in a 2D array representing floors and spaces. It allows the user to:
+ * - Display all cars in the vending machine
+ * - Retrieve a car from a specific floor and space
+ * - Sort and display cars by price or year
+ * 
+ * Cars are loaded from a text file which should contain
+ * details about each car (make, model, year, price, and location).
+ *
+ * Author: Alizah Saqib
+ * Course: CS 2050
+ * Instructor: Deborah Harding
+ * Date: 03/17/2025
+ */
+
 import java.util.Scanner;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -324,7 +342,7 @@ class VendingMachine {
 		// Checks if there is a Car object at the given location
 		// If there is it prints the Car's information 
 		// If there isn't, it prints out a different message
-		if (carsArray[floor][space] != null) {
+		if (carsArray[floor - 1][space - 1] != null) {
 		System.out.printf("Car retrieved from floor " 
 							+ floor + " location " 
 							+ space + ": ");
