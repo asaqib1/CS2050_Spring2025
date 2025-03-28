@@ -13,7 +13,7 @@
  * Author: Alizah Saqib
  * Course: CS 2050
  * Instructor: Deborah Harding
- * Date: 03/17/2025
+ * Date: 03/28/2025
  */
 
 import java.util.Scanner;
@@ -24,34 +24,44 @@ public class SaqibAlizahVendingMachineIteration1 {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		
+
 		Scanner input = new Scanner(System.in);
 
-		System.out.print("Enter the number of floors for the car vending machine: ");
+		// Makes sure user is giving correct input
+		System.out.println("Enter the number of floors for the car vending machine: ");
+		while (!input.hasNextInt()) {
+			System.out.println("Enter a valid number.");
+			input.next();
+		}
 		int floor = input.nextInt();
-		System.out.print("Enter the number of spaces for the car vending machine: ");
+
+		System.out.printf("Enter the number of spaces for the car vending machine: %n");
+		while(!input.hasNextInt()) {
+			System.out.println("Enter a valid number.");
+			input.next();
+		}
 		int space = input.nextInt();
-		
+
+
 		VendingMachine newMachine = new VendingMachine(floor, space);
 		
-		// Sets condition so the menu repeats until user quits
-		boolean repeat = true;
+		int choice;
 
 		// Main menu loop: Repeatedly displays the vending machine menu
 		// Switch: Performs actions based on user selection
 		do {
-		System.out.printf("%n=== Car Vending Machine Menu ===%n");
-		System.out.println("1. Load Car Data");
-		System.out.println("2. Display Vending Machine");
-		System.out.println("3. Retrieve a Car");
-		System.out.println("4. Print Sorted Inventory (Price)");
-		System.out.println("5. Print Sorted Inventory (Year)");
-		System.out.println("6. Exit");
-		
-		System.out.printf("%nEnter your choice: ");
-		int choice = input.nextInt();
-		
-		switch (choice) {
+			System.out.printf("%n=== Car Vending Machine Menu ===%n");
+			System.out.println("1. Load Car Data");
+			System.out.println("2. Display Vending Machine");
+			System.out.println("3. Retrieve a Car");
+			System.out.println("4. Print Sorted Inventory (Price)");
+			System.out.println("5. Print Sorted Inventory (Year)");
+			System.out.println("6. Exit");
+
+			System.out.printf("%nEnter your choice: ");
+			choice = input.nextInt();
+
+			switch (choice) {
 			case 1:
 				System.out.print("Enter the file name: ");
 				String fileName = input.next();
@@ -75,18 +85,17 @@ public class SaqibAlizahVendingMachineIteration1 {
 				break;
 			case 6:
 				System.out.print("Exiting program. Goodbye!");
-				repeat = false;
 				break;
-			
-		}
-		
-		} while (repeat == true);
-		
+
+			}
+
+		} while (choice != 6);
+
 		input.close();
-		
+
 	}//end main
-	
-	
+
+
 	/**
 	 * Reads car information from the specified file.
 	 * Each line in the file should include: row number, column number, year, price, make, and model.
@@ -95,13 +104,13 @@ public class SaqibAlizahVendingMachineIteration1 {
 	 * @param newMachine (vending machine object to which cars will be added)
 	 */
 	public static void readFromFile(String filename, VendingMachine newMachine) {
-		
+
 		// Initialize fileScanner to null so it can be correctly checked and closed in the finally block
 		Scanner fileScanner = null;
-		
+
 		try {
 			fileScanner = new Scanner(new File(filename));
-		
+
 			// Reads each line from the file to extract car details 
 			// This includes location, year, price, make, and model
 			// Then it creates a Car object with this data and adds it to the vending machine array
@@ -112,33 +121,33 @@ public class SaqibAlizahVendingMachineIteration1 {
 				double price = fileScanner.nextDouble();
 				String make = fileScanner.next();
 				String model = fileScanner.next();
-			
+
 				Car newCar = new Car(year, price, make, model);
 				newMachine.addCar(newCar, rowNumber, colNumber);
 			}
-			
-		// Prints out an error message if the file the user inputed is not found
+
+			// Prints out an error message if the file the user inputed is not found
 		} catch (FileNotFoundException e) {
 			System.out.printf("File was not found %n");
-		
-		// Closes scanner at the end if it was used
+
+			// Closes scanner at the end if it was used
 		} finally {
 			if (fileScanner != null) {
 				fileScanner.close();
 			}
 		}
-		
+
 	}
 
 }//end main class
 
 class Car {
-	
+
 	private int year;
 	private double price;
 	private String manufacturer;
 	private String model;
-	
+
 	/**
 	 * Constructor which initializes a Car object with year, price, manufacturer, and model
 	 * @param year (the year the car was manufactured)
@@ -152,45 +161,49 @@ class Car {
 		this.manufacturer = manufacturer;
 		this.model = model;
 	}
-	
+
 	public int getYear() {
 		return year;
 	}
-	
+
 	public double getPrice() {
 		return price;
 	}
-	
+
 	public String getManufacturer() {
 		return manufacturer;
 	}
-	
+
 	public String getModel() {
 		return model;
 	}
-	
+
 	// Returns a formatted string representation of the car
 	@Override
 	public String toString() {
 		return  manufacturer + " " + model + " " + year + " - $" + price;
 	}
-	
+
 }//end Car class
 
 
 class VendingMachine {
-	
+
 	private Car carsArray[][];
-	
+	private int rows;
+	private int columns;
+
 	/**
 	 * Constructor which initializes the vending machine with a given number of floors and spaces
 	 * @param floor (number of rows in the 2D array)
 	 * @param space (number of columns in the 2D array)
 	 */
-	public VendingMachine(int floor, int space) {
-		this.carsArray = new Car[floor][space];
+	public VendingMachine(int rows, int columns) {
+		this.rows = rows;
+		this.columns = columns;
+		this.carsArray = new Car[rows][columns];
 	}
-	
+
 	/**
 	 * Attempts to add a Car object to the specified floor and space in the 2D array
 	 * If the location is invalid or already occupied, an error message is printed
@@ -199,35 +212,39 @@ class VendingMachine {
 	 * @param space (the column in which the car will be added to)
 	 */
 	public void addCar(Car currentCar, int floor, int space) {
-		
-		// Check if the given floor and space are out of bounds
-		// If so, prints out an error message
-		if (floor < 0 || floor >= carsArray.length || space < 0 || space >= carsArray[0].length) {
-			System.out.println("Er: Invalid position at Floor: " + (floor + 1) + " Space: " + (space + 1));
+
+		// Check if the given floor and space are in bounds
+		if(floor >= 0 && floor < rows && space >= 0 && space < columns) {
+
+			// Places the car at the specified location if it is empty
+			if(carsArray[floor][space] == null) {
+				carsArray[floor][space] = currentCar;
+
+			} else {
+
+				// If the spot is already occupied, prints an error and does not place the car
+				System.out.println("Error: Slot at Floor: " 
+						+ (floor + 1) + " Space: " 
+						+ (space + 1) + " is already occupied.");
+				System.out.println("Car " + currentCar + " cannot be placed.");
+			}
+
+			// Otherwise, prints out an error message
+		} else {
+
+			System.out.println("Error: Invalid position at Floor: " + (floor + 1) + " Space: " + (space + 1));
 			System.out.println("Can not place car " + currentCar.toString());
-		}
-		
-		// Places the car at the specified location if it is empty
-		else if(carsArray[floor][space] == null) {
-			carsArray[floor][space] = currentCar;
-		}
-		
-		// If the spot is already occupied, prints an error and does not place the car
-		else {
-			System.out.println("Error: Slot at Floor: " 
-								+ (floor + 1) + " Space: " 
-								+ (space + 1) + " is already occupied.");
-			System.out.println("Car " + currentCar + " cannot be placed.");
-		}
+		}		
+
 	}
-	
+
 	/**
 	 * Takes a 2D array and copies it's non-null elements to a new 1D array
 	 * @param array (2D array to be flattened)
 	 * @return a 1D array containing all non-null Car objects from original 2D array 
 	 */
 	private Car[] flattenArray(Car[][] array) {
-		
+
 		// Counts the number of non-null Car objects in the 2D array
 		int notNullSpaces = 0;
 		for (int row = 0; row < array.length; row++) {
@@ -237,11 +254,11 @@ class VendingMachine {
 				}
 			}
 		}
-		
+
 		// Creates a new 1D array to hold only the non-null Car objects and tracks the current index
 		Car[] newArray = new Car[notNullSpaces];
 		int newArrayCount = 0;
-		
+
 		// Iterates through the 2D array and places its Car objects in the 1D array
 		for (int row = 0; row < array.length; row++) {
 			for (int column = 0; column < array[row].length; column++) {
@@ -251,75 +268,79 @@ class VendingMachine {
 				}
 			}
 		}
-		
+
 		return newArray;
 	}
-	
+
+	/**
+	 * Iterates through a 1D array and prints out its contents
+	 * @param array
+	 */
+	private void printSortedArray(Car[] array) {
+
+		for (int row = 0; row < array.length; row++) {
+			if (array[row] != null) {
+				System.out.println(array[row].toString());
+			}
+		}
+	}
+
 	/**
 	 * Sorts the non-null Car objects in the array by price in ascending order using insertion sort
 	 * Prints the sorted inventory by iterating through it
 	 */
 	public void displayPriceSortedCars() {
-		
+
 		// Returns the flattened 2D array
 		Car flattenedArray[] = flattenArray(carsArray);
-						
+
 		// Sorts the flattened array by price using insertion sort
 		for (int i = 1; i < flattenedArray.length; i++) {
 			Car key = flattenedArray[i];
 			int j = i - 1;
-			
+
 			while (j >= 0 && key.getPrice() < flattenedArray[j].getPrice()) {
 				flattenedArray[j + 1] = flattenedArray[j];
 				j--;
 			}
-			
+
 			flattenedArray[j + 1] = key;
-			
 		}
-		
+
 		// Iterates through the flattened and sorted array and prints out it's contents
 		System.out.printf("%nSorted Inventory by Price: %n");
-		for (int row = 0; row < flattenedArray.length; row++) {
-			if (flattenedArray[row] != null) {
-				System.out.println(flattenedArray[row].toString());
-			}
-		}
+		printSortedArray(flattenedArray);
 	}
-	
+
 	/**
 	 * Sorts the non-null Car objects in the array by year in ascending order using insertion sort
 	 * Prints the sorted inventory by iterating through it
 	 */
 	public void displayYearSortedCars() {
-		
+
 		// Returns the flattened 2D array
 		Car flattenedArray[] = flattenArray(carsArray);
-		
+
 		// Sorts the flattened array by year using insertion sort
 		for (int i = 1; i < flattenedArray.length; i++) {
 			Car key = flattenedArray[i];
 			int j = i - 1;
-			
+
 			while (j >= 0 && key.getYear() < flattenedArray[j].getYear()) {
 				flattenedArray[j + 1] = flattenedArray[j];
 				j--;
 			}
-			
+
 			flattenedArray[j + 1] = key;
-			
+
 		}
-		
+
 		// Iterates through the flattened and sorted array and prints out it's contents
 		System.out.printf("Sorted Inventory by Year: %n");
-		for (int row = 0; row < flattenedArray.length; row++) {
-			if (flattenedArray[row] != null) {
-				System.out.println(flattenedArray[row].toString());
-			}
-		}
-		
+		printSortedArray(flattenedArray);
+
 	}
-		
+
 	/**
 	 * Prints the Car at the specified floor and space if it exists
 	 * Otherwise prints an error message if no car is found at the location
@@ -327,39 +348,49 @@ class VendingMachine {
 	 * @param space (column number of car to retrieve from)
 	 */
 	public void retrieveCar(int floor, int space) {
-		
+
 		// Checks if there is a Car object at the given location
 		// If there is it prints the Car's information 
 		// If there isn't, it prints out a different message
-		if (carsArray[floor - 1][space - 1] != null) {
-		System.out.printf("Car retrieved from floor " 
-							+ floor + " location " 
-							+ space + ": ");
-		String car = carsArray[floor - 1][space - 1].toString();
-		System.out.printf(car + "%n");
+
+		int row = floor - 1;
+		int col = space - 1;
+
+		if (carsArray[row][col] != null) {
+			System.out.printf("Car retrieved from floor " 
+					+ floor + " location " 
+					+ space + ": ");
+			String car = carsArray[row][col].toString();
+			System.out.printf(car + "%n");
+
 		} else {
 			System.out.println("No car located at Floor " + floor + " Location " + space);
 		}
 	}
-	
+
 	/**
 	 * Prints each floor and space
 	 * Shows the car details if present, or marks the space as EMPTY if no car is stored there	 
 	 */
 	public void displayVendingMachine() {
-		
+
 		// Iterates through the 2D arrays rows and columns and prints out the information for each spot
+
 		System.out.println("Inventory Location");
 		for (int row = 0; row < carsArray.length; row ++) {
 			System.out.println("Floor " + (row + 1) + ": ");
+
 			for (int col = 0; col < carsArray[0].length; col ++) {
+				System.out.print("	Space " + (col + 1));
+
 				if (carsArray[row][col] == null) {
-					System.out.println("	Space " + (col + 1) + " EMPTY");
+					System.out.println(" EMPTY");
+
 				} else {
-					System.out.println("	Space " + (col + 1) + ": " + carsArray[row][col].toString());
+					System.out.println(": " + carsArray[row][col].toString());
 				}
 			}
 		}
 	}
-	
+
 }//end vendingMachine class
