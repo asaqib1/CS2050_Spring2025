@@ -109,9 +109,9 @@ class PremiumCar extends CarI2 {
 
 class VendingMachineI2 {
 	
-	private LinkedList<Car> vendingMachine;
-	private Queue<Car> washQueue;
-	private Map<String, Car> locationMap;
+	private LinkedList<CarI2> vendingMachine;
+	private Queue<CarI2> washQueue;
+	private Map<String, CarI2> locationMap;
 	private int totalFloors;
 	private int totalSpaces;
 	
@@ -121,7 +121,7 @@ class VendingMachineI2 {
 		locationMap = new HashMap<>();
 	}
 	
-	public static void addCar(Car currentCar, int Carfloor, int Carspace, int totalFloors, int totalSpaces, LinkedList<Car> vendingMachine, Map<String, Car> locationMap) {
+	public static void addCar(CarI2 currentCar, int Carfloor, int Carspace, int totalFloors, int totalSpaces, LinkedList<CarI2> vendingMachine, HashMap<String, CarI2> locationMap) {
 		
 		String key = Carfloor + ", " + Carspace;
 		
@@ -135,6 +135,80 @@ class VendingMachineI2 {
 		} else {
 			System.out.print("Could not add car, " + currentCar.toString() + ", invalid position (out of bounds).");
 		}
+	}
+	
+	public static void displayPriceSortedCars(ArrayList<CarI2> sortCars) {
+		sortCars.sort(Comparator.comparing(CarI2::getPrice));
+	}
+	
+	public static void displayYearSortedCars(ArrayList<CarI2> sortCars) {
+		sortCars.sort(Comparator.comparing(CarI2::getYear));
+	}
+	
+	public static void retrieveCar(int floor, int space, HashMap<String, Car> locationMap) {
+		String key = floor + ", " + space;
+		Car car = locationMap.get(key);
+		
+		if(car != null) {
+			System.out.println("Car retrieved: " + car);
+		} else {
+			System.out.println("Car not found at this location");
+		}
+	}
+	
+	public static void displayVendingMachine(LinkedList<CarI2> vendingMachine) {
+		for(CarI2 currentCar : vendingMachine) {
+			System.out.println(currentCar);
+		}
+	}
+	
+	public static void searchForCars(String manufacturer, String type, LinkedList<CarI2> vendingMachine) {
+		List<CarI2> results = new ArrayList<>();
+		for(CarI2 currentCar : vendingMachine) {
+			if(type.equalsIgnoreCase("Basic") && currentCar instanceof BasicCar || type.equalsIgnoreCase("Premium") && currentCar instanceof PremiumCar) {
+				if(currentCar.getManufacturer().equalsIgnoreCase(manufacturer)) {
+					results.add(currentCar);			
+				}
+			}
+		}
+		
+		if(results.isEmpty()) {
+			System.out.print("No cars available");
+		} else {
+			results.sort(Comparator.comparing(CarI2::getManufacturer));
+			for(CarI2 car : results) {
+				System.out.println(car);
+			}
+		}
+	}
+	
+	public static void addToWashQueue(Car currentCar, Queue<Car> washQueue) {
+		System.out.println("Car retrieved: " + currentCar.toString());
+		washQueue.add(currentCar);
+		System.out.println("Car added to wash queue.");
+	}
+	
+	public static void processWashQueue(Queue<CarI2> washQueue) {
+		if(washQueue.isEmpty()) {
+			System.out.println("No cars in the wash queue.");
+		} else {
+			while(!washQueue.isEmpty()) {
+				CarI2 washedCar = washQueue.remove();
+				System.out.println("Washing: " + washedCar);
+			}
+		}
+	}
+	
+	public static void removeSoldCar(int floor, int space, Map<String, CarI2> locationMap, LinkedList<CarI2> vendingMachine) {
+		String key = floor + ", " + space;
+		CarI2 carSold = locationMap.get(key);
+		if(carSold != null) {
+			System.out.println("Car sold: " + carSold);
+			locationMap.remove(key, carSold);
+			vendingMachine.remove(carSold);
+		} else {
+			System.out.println("No car found at Floor " + floor + " Space " + space);
+		}			
 	}
 	
 }// end VendingMachineI2 class
