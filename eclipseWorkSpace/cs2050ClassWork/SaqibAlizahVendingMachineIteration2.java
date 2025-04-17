@@ -112,6 +112,8 @@ class VendingMachineI2 {
 	private LinkedList<Car> vendingMachine;
 	private Queue<Car> washQueue;
 	private Map<String, Car> locationMap;
+	private int totalFloors;
+	private int totalSpaces;
 	
 	public VendingMachineI2() {
 		vendingMachine = new LinkedList<>();
@@ -119,9 +121,20 @@ class VendingMachineI2 {
 		locationMap = new HashMap<>();
 	}
 	
-	public static void addCar(Car currentCar, int floor, int space, LinkedList<Car> vendingMachine) {
-		vendingMachine.add(currentCar);
-		//locationMap.put()
+	public static void addCar(Car currentCar, int Carfloor, int Carspace, int totalFloors, int totalSpaces, LinkedList<Car> vendingMachine, Map<String, Car> locationMap) {
+		
+		String key = Carfloor + ", " + Carspace;
+		
+		if(Carfloor >= 1 && Carfloor <= totalFloors && Carspace >= 1 && Carspace <= totalSpaces) {
+			if(locationMap.containsKey(key)) {
+				System.out.println("Could not add car, " + currentCar.toString() + " already a car in that spot.");
+			} else {
+				locationMap.put(key, currentCar);
+				vendingMachine.add(currentCar);
+			}
+		} else {
+			System.out.print("Could not add car, " + currentCar.toString() + ", invalid position (out of bounds).");
+		}
 	}
 	
 }// end VendingMachineI2 class
