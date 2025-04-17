@@ -26,7 +26,7 @@ import java.util.*;
 
 public class SaqibAlizahVendingMachineIteration2 {
 
-	static void main(String[] args) {
+	public static void main(String[] args) {
 		
 		Scanner input = new Scanner(System.in);
 		
@@ -98,7 +98,7 @@ public class SaqibAlizahVendingMachineIteration2 {
 				int floorNum = input.nextInt();
 				System.out.print("Enter space: ");
 				int spaceNum = input.nextInt();
-				newMachine.retrieveCar(floorNum, spaceNum);
+				newMachine.addToWashQueue(floorNum, spaceNum);
 				break;
 			case 8: 
 				newMachine.processWashQueue();
@@ -116,7 +116,7 @@ public class SaqibAlizahVendingMachineIteration2 {
 
 			}
 
-		} while (choice != 6);
+		} while (choice != 10);
 
 		input.close();
 
@@ -129,25 +129,26 @@ public class SaqibAlizahVendingMachineIteration2 {
 		try {
 			fileScanner = new Scanner(new File(filename));
 
-			while (fileScanner.hasNextInt()) {
+			while (fileScanner.hasNext()) {
 				String carType = fileScanner.next();
 				int rowNumber = fileScanner.nextInt();
 				int colNumber = fileScanner.nextInt();
 				int year = fileScanner.nextInt();
 				double price = fileScanner.nextDouble();
 				String make = fileScanner.next();
-				String model = fileScanner.next();
+				String model = fileScanner.nextLine().trim();
+				
+				CarI2 newCar = null;
 
 				if(carType.equalsIgnoreCase("B")) {
-					CarI2 newCar = new BasicCar(carType, year, price, make, model, rowNumber, colNumber);
-					newMachine.addCar(newCar, rowNumber, colNumber);
+					newCar = new BasicCar(carType, year, price, make, model, rowNumber, colNumber);
 				}
 				
 				else if(carType.equalsIgnoreCase("P")) {
-					CarI2 newCar = new PremiumCar(carType, year, price, make, model, rowNumber, colNumber);
-					newMachine.addCar(newCar, rowNumber, colNumber);
-
+					newCar = new PremiumCar(carType, year, price, make, model, rowNumber, colNumber);
 				}
+				
+				newMachine.addCar(newCar, rowNumber, colNumber);
 			
 			}
 
@@ -224,7 +225,7 @@ class BasicCar extends CarI2{
 	@Override
 	public String toString() {
 		return "Basic Car: " + getManufacturer() + " " + getModel() + " " + getYear() + 
-				" - " + " $" + getPrice() + " (Floor: " + getFloor() + ", Space: " + getSpace() + ")";
+				" - $" + getPrice() + " (Floor: " + getFloor() + ", Space: " + getSpace() + ")";
 	}
 	
 }//end basicCar class
@@ -238,7 +239,7 @@ class PremiumCar extends CarI2 {
 	@Override
 	public String toString() {
 		return "Premium Car: " + getManufacturer() + " " + getModel() + " " + getYear() + 
-				" - " + " $" + getPrice() + " (Floor: " + getFloor() + ", Space: " + getSpace() + ")";
+				" - $" + getPrice() + " (Floor: " + getFloor() + ", Space: " + getSpace() + ")";
 	}
 	
 }// end PremiumCar class
@@ -259,11 +260,11 @@ class VendingMachineI2 {
 		this.totalSpaces = totalSpaces;
 	}
 	
-	public void addCar(CarI2 currentCar, int Carfloor, int Carspace) {
+	public void addCar(CarI2 currentCar, int carFloor, int carSpace) {
 		
-		String key = Carfloor + ", " + Carspace;
+		String key = makeKey(carFloor, carSpace);
 		
-		if(Carfloor >= 1 && Carfloor <= totalFloors && Carspace >= 1 && Carspace <= totalSpaces) {
+		if(carFloor >= 1 && carFloor <= totalFloors && carSpace >= 1 && carSpace <= totalSpaces) {
 			if(locationMap.containsKey(key)) {
 				System.out.println("Could not add car, " + currentCar + " already a car in that spot.");
 			} else {
@@ -293,7 +294,7 @@ class VendingMachineI2 {
 	}
 	
 	public void retrieveCar(int floor, int space) {
-		String key = floor + ", " + space;
+		String key = makeKey(floor, space);
 		CarI2 car = locationMap.get(key);
 		
 		if(car != null) {
@@ -320,7 +321,7 @@ class VendingMachineI2 {
 		}
 		
 		if(results.isEmpty()) {
-			System.out.print("No cars available");
+			System.out.println("No cars available");
 		} else {
 			results.sort(Comparator.comparing(CarI2::getManufacturer));
 			for(CarI2 car : results) {
@@ -329,10 +330,17 @@ class VendingMachineI2 {
 		}
 	}
 	
-	public void addToWashQueue(CarI2 currentCar) {
-		System.out.println("Car retrieved: " + currentCar.toString());
-		washQueue.add(currentCar);
-		System.out.println("Car added to wash queue.");
+	public void addToWashQueue(int floor, int space) {
+		String key = makeKey(floor, space);
+		CarI2 currentCar = locationMap.get(key);
+		
+		if(currentCar != null) {
+			System.out.println("Car retrieved: " + currentCar);
+			washQueue.add(currentCar);
+			System.out.println("Car added to wash queue.");
+		} else {
+			System.out.println("No car at that position, could not be added to wash queue.");
+		}
 	}
 	
 	public void processWashQueue() {
@@ -347,8 +355,9 @@ class VendingMachineI2 {
 	}
 	
 	public void removeSoldCar(int floor, int space) {
-		String key = floor + ", " + space;
+		String key = makeKey(floor, space);
 		CarI2 carSold = locationMap.get(key);
+		
 		if(carSold != null) {
 			System.out.println("Car sold: " + carSold);
 			locationMap.remove(key, carSold);
@@ -356,6 +365,10 @@ class VendingMachineI2 {
 		} else {
 			System.out.println("No car found at Floor " + floor + " Space " + space);
 		}			
+	}
+	
+	private String makeKey(int floor, int space) {
+		return floor + "," + space;
 	}
 	
 }// end VendingMachineI2 class
