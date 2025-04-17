@@ -74,3 +74,17 @@ abstract class CarI2 {
 	public abstract String toString();
 
 }// end CarI2 abstract class
+
+class BasicCar extends CarI2{
+
+	public BasicCar(int year, double Price, String Manufacturer, String Model, int floor, int space) {
+		super(year, Price, Manufacturer, Model, floor, space);
+		
+	}
+
+	@Override
+	public String toString() {
+		return "Basic Car: " + getManufacturer() + " " + getModel() + " " + getYear() + " - " + " $" + getPrice() + " (Floor: " + getFloor() + ", Space: " + getSpace() + ")";
+	}
+	
+}//end basicCar class
