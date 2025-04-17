@@ -20,6 +20,8 @@
  * Date: 04/28/2025
  */
 
+import java.util.*;
+
 public class SaqibAlizahVendingMachineIteration2 {
 
 	static void main(String[] args) {
@@ -38,6 +40,7 @@ abstract class CarI2 {
 	private int space;
 	
 	public CarI2(int year, double price, String manufacturer, String model, int floor, int space) {
+		
 		this.year = year;
 		this.price = price;
 		this.manufacturer = manufacturer;
@@ -103,3 +106,22 @@ class PremiumCar extends CarI2 {
 	}
 	
 }// end PremiumCar class
+
+class VendingMachineI2 {
+	
+	private LinkedList<Car> vendingMachine;
+	private Queue<Car> washQueue;
+	private Map<String, Car> locationMap;
+	
+	public VendingMachineI2() {
+		vendingMachine = new LinkedList<>();
+		washQueue = new LinkedList<>();
+		locationMap = new HashMap<>();
+	}
+	
+	public static void addCar(Car currentCar, int floor, int space, LinkedList<Car> vendingMachine) {
+		vendingMachine.add(currentCar);
+		//locationMap.put()
+	}
+	
+}// end VendingMachineI2 class
