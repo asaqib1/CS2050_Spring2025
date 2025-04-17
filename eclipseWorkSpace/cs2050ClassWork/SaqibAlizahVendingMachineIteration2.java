@@ -37,7 +37,7 @@ abstract class CarI2 {
 	private int floor;
 	private int space;
 	
-	public CarI2(int year, double Price, String Manufacturer, String Model, int floor, int space) {
+	public CarI2(int year, double price, String manufacturer, String model, int floor, int space) {
 		this.year = year;
 		this.price = price;
 		this.manufacturer = manufacturer;
@@ -84,7 +84,22 @@ class BasicCar extends CarI2{
 
 	@Override
 	public String toString() {
-		return "Basic Car: " + getManufacturer() + " " + getModel() + " " + getYear() + " - " + " $" + getPrice() + " (Floor: " + getFloor() + ", Space: " + getSpace() + ")";
+		return "Basic Car: " + getManufacturer() + " " + getModel() + " " + getYear() + 
+				" - " + " $" + getPrice() + " (Floor: " + getFloor() + ", Space: " + getSpace() + ")";
 	}
 	
 }//end basicCar class
+
+class PremiumCar extends CarI2 {
+	
+	public PremiumCar(int year, double Price, String Manufacturer, String Model, int floor, int space) {
+		super(year, Price, Manufacturer, Model, floor, space);
+	}
+
+	@Override
+	public String toString() {
+		return "Premium Car: " + getManufacturer() + " " + getModel() + " " + getYear() + 
+				" - " + " $" + getPrice() + " (Floor: " + getFloor() + ", Space: " + getSpace() + ")";
+	}
+	
+}// end PremiumCar class
