@@ -20,6 +20,8 @@
  * Date: 04/28/2025
  */
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.*;
 
 public class SaqibAlizahVendingMachineIteration2 {
@@ -27,11 +29,53 @@ public class SaqibAlizahVendingMachineIteration2 {
 	static void main(String[] args) {
 
 	}//end main
+	
+	public static void readFromFile(String filename, VendingMachineI2 newMachine) {
+
+		// Initialize fileScanner to null so it can be correctly checked and closed in the finally block
+		Scanner fileScanner = null;
+
+		try {
+			fileScanner = new Scanner(new File(filename));
+
+			while (fileScanner.hasNextInt()) {
+				String carType = fileScanner.next();
+				int rowNumber = fileScanner.nextInt();
+				int colNumber = fileScanner.nextInt();
+				int year = fileScanner.nextInt();
+				double price = fileScanner.nextDouble();
+				String make = fileScanner.next();
+				String model = fileScanner.next();
+
+				if(carType.equalsIgnoreCase("B")) {
+					CarI2 newCar = new BasicCar(carType, year, price, make, model, rowNumber, colNumber);
+					newMachine.addCar(newCar, rowNumber, colNumber);
+				}
+				
+				else if(carType.equalsIgnoreCase("P")) {
+					CarI2 newCar = new PremiumCar(carType, year, price, make, model, rowNumber, colNumber);
+					newMachine.addCar(newCar, rowNumber, colNumber);
+
+				}
+			
+			}
+
+		} catch (FileNotFoundException e) {
+			System.out.printf("File was not found %n");
+
+		} finally {
+			if (fileScanner != null) {
+				fileScanner.close();
+			}
+		}
+
+	}
 
 }//end public class
 
 abstract class CarI2 {
 	
+	private String type;
 	private int year;
 	private double price;
 	private String manufacturer;
@@ -39,7 +83,7 @@ abstract class CarI2 {
 	private int floor;
 	private int space;
 	
-	public CarI2(int year, double price, String manufacturer, String model, int floor, int space) {
+	public CarI2(String type, int year, double price, String manufacturer, String model, int floor, int space) {
 		
 		this.year = year;
 		this.price = price;
@@ -80,8 +124,8 @@ abstract class CarI2 {
 
 class BasicCar extends CarI2{
 
-	public BasicCar(int year, double Price, String Manufacturer, String Model, int floor, int space) {
-		super(year, Price, Manufacturer, Model, floor, space);
+	public BasicCar(String type, int year, double Price, String Manufacturer, String Model, int floor, int space) {
+		super(type, year, Price, Manufacturer, Model, floor, space);
 		
 	}
 
@@ -95,8 +139,8 @@ class BasicCar extends CarI2{
 
 class PremiumCar extends CarI2 {
 	
-	public PremiumCar(int year, double Price, String Manufacturer, String Model, int floor, int space) {
-		super(year, Price, Manufacturer, Model, floor, space);
+	public PremiumCar(String type, int year, double Price, String Manufacturer, String Model, int floor, int space) {
+		super(type, year, Price, Manufacturer, Model, floor, space);
 	}
 
 	@Override
@@ -121,33 +165,40 @@ class VendingMachineI2 {
 		locationMap = new HashMap<>();
 	}
 	
-	public static void addCar(CarI2 currentCar, int Carfloor, int Carspace, int totalFloors, int totalSpaces, LinkedList<CarI2> vendingMachine, HashMap<String, CarI2> locationMap) {
+	public void addCar(CarI2 currentCar, int Carfloor, int Carspace) {
 		
 		String key = Carfloor + ", " + Carspace;
 		
 		if(Carfloor >= 1 && Carfloor <= totalFloors && Carspace >= 1 && Carspace <= totalSpaces) {
 			if(locationMap.containsKey(key)) {
-				System.out.println("Could not add car, " + currentCar.toString() + " already a car in that spot.");
+				System.out.println("Could not add car, " + currentCar + " already a car in that spot.");
 			} else {
 				locationMap.put(key, currentCar);
 				vendingMachine.add(currentCar);
 			}
 		} else {
-			System.out.print("Could not add car, " + currentCar.toString() + ", invalid position (out of bounds).");
+			System.out.println("Could not add car, " + currentCar.toString() + ", invalid position (out of bounds).");
 		}
 	}
 	
-	public static void displayPriceSortedCars(ArrayList<CarI2> sortCars) {
-		sortCars.sort(Comparator.comparing(CarI2::getPrice));
+	public void displaySortedCars(String sortBy) {
+		List<CarI2> cars = new ArrayList<>(vendingMachine);
+		if(sortBy.equalsIgnoreCase("Price")){
+			cars.sort(Comparator.comparing(CarI2::getPrice));
+		}
+
+		else if (sortBy.equalsIgnoreCase("Year")) {
+			cars.sort(Comparator.comparing(CarI2::getYear));
+		}
+		
+		for (CarI2 currentCar : cars) {
+			System.out.println(currentCar);
+		}
 	}
 	
-	public static void displayYearSortedCars(ArrayList<CarI2> sortCars) {
-		sortCars.sort(Comparator.comparing(CarI2::getYear));
-	}
-	
-	public static void retrieveCar(int floor, int space, HashMap<String, Car> locationMap) {
+	public void retrieveCar(int floor, int space) {
 		String key = floor + ", " + space;
-		Car car = locationMap.get(key);
+		CarI2 car = locationMap.get(key);
 		
 		if(car != null) {
 			System.out.println("Car retrieved: " + car);
@@ -156,13 +207,13 @@ class VendingMachineI2 {
 		}
 	}
 	
-	public static void displayVendingMachine(LinkedList<CarI2> vendingMachine) {
+	public void displayVendingMachine() {
 		for(CarI2 currentCar : vendingMachine) {
 			System.out.println(currentCar);
 		}
 	}
 	
-	public static void searchForCars(String manufacturer, String type, LinkedList<CarI2> vendingMachine) {
+	public void searchForCars(String manufacturer, String type) {
 		List<CarI2> results = new ArrayList<>();
 		for(CarI2 currentCar : vendingMachine) {
 			if(type.equalsIgnoreCase("Basic") && currentCar instanceof BasicCar || type.equalsIgnoreCase("Premium") && currentCar instanceof PremiumCar) {
@@ -182,13 +233,13 @@ class VendingMachineI2 {
 		}
 	}
 	
-	public static void addToWashQueue(Car currentCar, Queue<Car> washQueue) {
+	public void addToWashQueue(CarI2 currentCar) {
 		System.out.println("Car retrieved: " + currentCar.toString());
 		washQueue.add(currentCar);
 		System.out.println("Car added to wash queue.");
 	}
 	
-	public static void processWashQueue(Queue<CarI2> washQueue) {
+	public void processWashQueue() {
 		if(washQueue.isEmpty()) {
 			System.out.println("No cars in the wash queue.");
 		} else {
@@ -199,7 +250,7 @@ class VendingMachineI2 {
 		}
 	}
 	
-	public static void removeSoldCar(int floor, int space, Map<String, CarI2> locationMap, LinkedList<CarI2> vendingMachine) {
+	public void removeSoldCar(int floor, int space) {
 		String key = floor + ", " + space;
 		CarI2 carSold = locationMap.get(key);
 		if(carSold != null) {
