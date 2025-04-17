@@ -30,4 +30,47 @@ public class SaqibAlizahVendingMachineIteration2 {
 
 abstract class CarI2 {
 	
-}
+	private int year;
+	private double price;
+	private String manufacturer;
+	private String model;
+	private int floor;
+	private int space;
+	
+	public CarI2(int year, double Price, String Manufacturer, String Model, int floor, int space) {
+		this.year = year;
+		this.price = price;
+		this.manufacturer = manufacturer;
+		this.model = model;
+		this.floor = floor;
+	    this.space = space;
+	}
+	
+	public int getYear() {
+		return year;
+	}
+
+	public double getPrice() {
+		return price;
+	}
+
+	public String getManufacturer() {
+		return manufacturer;
+	}
+
+	public String getModel() {
+		return model;
+	}
+	
+	public int getFloor() {
+		return floor;
+	}
+	
+	public int getSpace() {
+		return space;
+	}
+	
+	@Override
+	public abstract String toString();
+
+}// end CarI2 abstract class
