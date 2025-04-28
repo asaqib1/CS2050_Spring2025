@@ -30,6 +30,7 @@ public class SaqibAlizahVendingMachineIteration2 {
 		
 		Scanner input = new Scanner(System.in);
 		
+		// Makes sure user is giving correct input
 		System.out.println("Enter the number of floors for the car vending machine: ");
 		while (!input.hasNextInt()) {
 			System.out.println("Enter a valid number.");
@@ -48,6 +49,8 @@ public class SaqibAlizahVendingMachineIteration2 {
 		
 		int choice;
 		
+		// Main menu loop: Repeatedly displays the vending machine menu
+		// Switch: Performs actions based on user selection
 		do {
 			System.out.printf("%n=== Car Vending Machine Menu ===%n");
 			System.out.println("1. Load Car Data from File");
@@ -122,13 +125,24 @@ public class SaqibAlizahVendingMachineIteration2 {
 
 	}//end main
 	
+	/**
+	 * Reads car information from the specified file.
+	 * Each line in the file should include: car type, row number, column number, year, price, make, and model.
+	 * For each line, creates a Car object and adds it to the vending machine's arrayList and hashMap.
+	 * @param filename (the name of the file containing the car data)
+	 * @param newMachine (vending machine object to which cars will be added)
+	 */
 	public static void readFromFile(String filename, VendingMachineI2 newMachine) {
-
+		
+		// Initialize fileScanner to null so it can be correctly checked and closed in the finally block
 		Scanner fileScanner = null;
 
 		try {
 			fileScanner = new Scanner(new File(filename));
 
+			// Reads each line from the file to extract car details 
+			// This includes type, location, year, price, make, and model
+			// Then it creates a Car object with this data and adds it to the vending machine 
 			while (fileScanner.hasNext()) {
 				String carType = fileScanner.next();
 				int rowNumber = fileScanner.nextInt();
@@ -152,9 +166,11 @@ public class SaqibAlizahVendingMachineIteration2 {
 			
 			}
 
+			// Prints out an error message if the file the user inputed is not found
 		} catch (FileNotFoundException e) {
 			System.out.printf("File was not found %n");
-
+			
+			// Closes scanner at the end if it was used
 		} finally {
 			if (fileScanner != null) {
 				fileScanner.close();
@@ -175,6 +191,15 @@ abstract class CarI2 {
 	private int floor;
 	private int space;
 	
+	/**
+	 * Constructor which initializes a Car object with type, year, price, manufacturer, and model
+	 * @param year (the year the car was manufactured)
+	 * @param price (price of the car)
+	 * @param manufacturer (the name of the car's manufacturer)
+	 * @param model (model name of the car)
+	 * @param floor (size of the vending machine)
+	 * @param space (size of the vending machine)
+	 */
 	public CarI2(String type, int year, double price, String manufacturer, String model, int floor, int space) {
 		
 		this.type = type;
@@ -210,6 +235,7 @@ abstract class CarI2 {
 		return space;
 	}
 	
+	// Returns a formatted string representation of the car
 	@Override
 	public abstract String toString();
 
@@ -217,11 +243,23 @@ abstract class CarI2 {
 
 class BasicCar extends CarI2{
 
+	
+	/**
+	 * BasicCar constructor which uses the super keyword to call the Superclass's constructor
+	 * @param type
+	 * @param year
+	 * @param Price
+	 * @param Manufacturer
+	 * @param Model
+	 * @param floor
+	 * @param space
+	 */
 	public BasicCar(String type, int year, double Price, String Manufacturer, String Model, int floor, int space) {
 		super(type, year, Price, Manufacturer, Model, floor, space);
 		
 	}
 
+	// Returns a formatted string representation of the car and is overridden from the superclass
 	@Override
 	public String toString() {
 		return "Basic Car: " + getManufacturer() + " " + getModel() + " " + getYear() + 
@@ -232,10 +270,21 @@ class BasicCar extends CarI2{
 
 class PremiumCar extends CarI2 {
 	
+	/**
+	 * PremiumCar constructor which uses the super keyword to call the Superclass's constructor
+	 * @param type
+	 * @param year
+	 * @param Price
+	 * @param Manufacturer
+	 * @param Model
+	 * @param floor
+	 * @param space
+	 */
 	public PremiumCar(String type, int year, double Price, String Manufacturer, String Model, int floor, int space) {
 		super(type, year, Price, Manufacturer, Model, floor, space);
 	}
 
+	// Returns a formatted string representation of the car and is overridden from the superclass
 	@Override
 	public String toString() {
 		return "Premium Car: " + getManufacturer() + " " + getModel() + " " + getYear() + 
@@ -252,6 +301,13 @@ class VendingMachineI2 {
 	private int totalFloors;
 	private int totalSpaces;
 	
+	/**
+	 * Constructor for the VendingMachineI2 class
+	 * Initializes the vending machine, wash queue, and location map
+	 * Sets the total number of floors and spaces
+	 * @param totalFloors
+	 * @param totalSpaces
+	 */
 	public VendingMachineI2(int totalFloors, int totalSpaces) {
 		vendingMachine = new LinkedList<>();
 		washQueue = new LinkedList<>();
@@ -260,10 +316,18 @@ class VendingMachineI2 {
 		this.totalSpaces = totalSpaces;
 	}
 	
+	/**
+	 * Adds a car to the vending machine at a specific floor and space
+	 * Checks for valid position and if the spot is already occupied
+	 * @param currentCar
+	 * @param carFloor
+	 * @param carSpace
+	 */
 	public void addCar(CarI2 currentCar, int carFloor, int carSpace) {
 		
 		String key = makeKey(carFloor, carSpace);
 		
+		// Check if position is valid
 		if(carFloor >= 1 && carFloor <= totalFloors && carSpace >= 1 && carSpace <= totalSpaces) {
 			if(locationMap.containsKey(key)) {
 				System.out.println("Could not add car, " + currentCar + " already a car in that spot.");
@@ -276,23 +340,37 @@ class VendingMachineI2 {
 		}
 	}
 	
+	/**
+	 * Displays the list of cars sorted by price or year
+	 * @param sortBy
+	 */
 	public void displaySortedCars(String sortBy) {
 		List<CarI2> cars = new ArrayList<>(vendingMachine);
+		
+		// Sort by price
 		if(sortBy.equalsIgnoreCase("Price")){
 			System.out.println("Sorted Inventory by Price: ");
 			cars.sort(Comparator.comparing(CarI2::getPrice));
 		}
 
+		// Sort by year
 		else if (sortBy.equalsIgnoreCase("Year")) {
 			System.out.println("Sorted Inventory by Year: ");
 			cars.sort(Comparator.comparing(CarI2::getYear));
 		}
 		
+		// Print out the sorted list
 		for (CarI2 currentCar : cars) {
 			System.out.println(currentCar);
 		}
 	}
 	
+	/**
+	 * Retrieves car based on floor and space location
+	 * It does not remove the car, just prints it out
+	 * @param floor
+	 * @param space
+	 */
 	public void retrieveCar(int floor, int space) {
 		String key = makeKey(floor, space);
 		CarI2 car = locationMap.get(key);
@@ -304,15 +382,30 @@ class VendingMachineI2 {
 		}
 	}
 	
+	/**
+	 * Displays all cars currently stored in the vending machine
+	 */
 	public void displayVendingMachine() {
-		for(CarI2 currentCar : vendingMachine) {
-			System.out.println(currentCar);
+		if (vendingMachine.isEmpty()) {
+			System.out.println("Currently no cars in the vending machine.");
+		} else {
+			for(CarI2 currentCar : vendingMachine) {
+				System.out.println(currentCar);
+			}
 		}
 	}
 	
+	/**
+	 * Searches for cars by manufacturer and type (Basic or Premium)
+	 * Displays all matching cars sorted by manufacturer name
+	 * @param manufacturer
+	 * @param type
+	 */
 	public void searchForCars(String manufacturer, String type) {
 		List<CarI2> results = new ArrayList<>();
 		for(CarI2 currentCar : vendingMachine) {
+			
+			// Check car type and manufacturer
 			if(type.equalsIgnoreCase("Basic") && currentCar instanceof BasicCar || type.equalsIgnoreCase("Premium") && currentCar instanceof PremiumCar) {
 				if(currentCar.getManufacturer().equalsIgnoreCase(manufacturer)) {
 					results.add(currentCar);			
@@ -320,8 +413,12 @@ class VendingMachineI2 {
 			}
 		}
 		
+		// Checks if no matching cars are found
+		// Prints out error message if so
 		if(results.isEmpty()) {
 			System.out.println("No cars available");
+			
+		// Else prints out the list with the matching cars
 		} else {
 			results.sort(Comparator.comparing(CarI2::getManufacturer));
 			for(CarI2 car : results) {
@@ -330,6 +427,11 @@ class VendingMachineI2 {
 		}
 	}
 	
+	/**
+	 * Adds a car to the wash queue based on its location
+	 * @param floor
+	 * @param space
+	 */
 	public void addToWashQueue(int floor, int space) {
 		String key = makeKey(floor, space);
 		CarI2 currentCar = locationMap.get(key);
@@ -343,17 +445,27 @@ class VendingMachineI2 {
 		}
 	}
 	
+	/**
+	 * Processes the wash queue by "washing" (printing and removing) each car
+	 */
 	public void processWashQueue() {
 		if(washQueue.isEmpty()) {
 			System.out.println("No cars in the wash queue.");
 		} else {
 			while(!washQueue.isEmpty()) {
+				
+				// Remove from queue
 				CarI2 washedCar = washQueue.remove();
 				System.out.println("Washing: " + washedCar);
 			}
 		}
 	}
 	
+	/**
+	 * Removes a sold car from both the vending machine and location map
+	 * @param floor
+	 * @param space
+	 */
 	public void removeSoldCar(int floor, int space) {
 		String key = makeKey(floor, space);
 		CarI2 carSold = locationMap.get(key);
@@ -367,6 +479,13 @@ class VendingMachineI2 {
 		}			
 	}
 	
+	/**
+	 * Helper method used to uniquely identify car locations
+	 * Creates a unique key based on floor and space numbers
+	 * @param floor
+	 * @param space
+	 * @return
+	 */
 	private String makeKey(int floor, int space) {
 		return floor + "," + space;
 	}
