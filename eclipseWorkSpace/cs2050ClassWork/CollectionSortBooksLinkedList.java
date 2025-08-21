@@ -146,7 +146,24 @@ public class CollectionSortBooksLinkedList
         } else {
         	System.out.println("Book not found " + bookSearch);
         }
-    }
+        
+        // Lab: explore TreeMap
+        TreeMap<Integer, List<Book>> booksByYear = new TreeMap<>();
+        
+        for(Book currentBook : bookInventory) {
+        	booksByYear.putIfAbsent(currentBook.getYear(), new ArrayList<>());
+        	booksByYear.get(currentBook.getYear()).add(currentBook);
+        }
+        
+        for(Map.Entry<Integer, List<Book>> entry : booksByYear.entrySet()) {
+        	System.out.println("\nYear: " + entry.getKey());
+        	
+        	for(Book book : entry.getValue()) {
+        		System.out.println(book);
+        	}
+        }
+        
+    }//end main
 	public static List<Book> findBooksByAuthor(List<Book> inventory, String author) {
 	    List<Book> results = new ArrayList<>();
 	    for (Book currentBook : inventory) {
